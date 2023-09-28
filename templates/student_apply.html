@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Student Register{% endblock  %}
+{% block content %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Listen for form submission
+            $('#state-form').submit(function(event) {
+                event.preventDefault();  // Prevent the form from submitting
+
+                // Get the selected state
+                var selectedState = $('#id_state').val();
+                // Make an AJAX request to fetch institutions in the selected state
+                $.ajax({
+                    url: '{% url "get_institutions" %}',  // Corrected URL template tag
+                    type: 'GET',
+                    data: { state_id: selectedState },
+                    success: function(data) {
+                        console.log(data);
+                        // Update the HTML to display the list of institutions
+                        var institutionsSelect = $('#id_institution');
+                        institutionsSelect.empty();  // Clear existing options
+
+                        $.each(data, function(index, institution) {
+                            // Create an option element for each institution
+                            institutionsSelect.append($('<option>', {
+                                value: institution.id,
+                                text: institution.institution_name
+                            }));
+                        });
+    
+                        // Show the scholarship application form
+                        $('#scholarship-form').show();
+                    }
+                });
+            });
+        });
+    </script>
+
+    <div class="max-w-lg mx-auto mt-8 p-6 bg-white rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-6">Apply for Scholarship</h2>
+    
+        <!-- State Form -->
+        <form method="post" id="state-form" class="mb-6">
+            {% csrf_token %}
+            {{ state_form.as_p }}
+            <br>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Next</button>
+        </form>
+    
+        <!-- Scholarship Form (Initially Hidden) -->
+        <form method="post" id="scholarship-form" class="hidden">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <br>
+            <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition">Submit Application</button>
+        </form>
+    </div>
+    
+
+{% endblock %}

@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Student Register{% endblock  %}
+{% block content %}
+
+<div class="bg-gray-100 min-h-screen py-8">
+    <div class="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md">
+        {% if messages %}
+        <ul class="mb-4">
+            {% for message in messages %}
+            <li class="text-{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <h2 class="text-2xl font-semibold mb-6">Welcome to Your Student Dashboard, {{ student.name }}!</h2>
+        <!-- Button to open the notification popup -->
+<button onclick="openNotificationPopup()"
+class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-semibold focus:outline-none mb-4">
+Open Notifications
+</button>
+
+        <div class="bg-gray-200 p-4 rounded-md">
+            <h3 class="text-lg font-semibold">Student Details</h3>
+            <p><strong>Name:</strong> {{ student.name }}</p>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+            <p><strong>Contact Number:</strong> {{ student.contact_number }}</p>
+            <p><strong>Home State:</strong> {{ student.home_state.name }}</p>
+            <p><strong>Address:</strong> {{ student.address }}</p>
+        </div>
+
+        <div class="mt-8">
+            <h3 class="text-lg font-semibold">Available Scholarships</h3>
+            <ul class="mt-4 space-y-4">
+                {% for scholarship in scholarships %}
+                <li class="border p-4 rounded-md">
+                    <strong class="text-xl">{{ scholarship.name }}</strong>
+                    <p><strong>Eligibility Criteria:</strong> {{ scholarship.eligibility_criteria }}</p>
+                    <p><strong>Application Deadline:</strong> {{ scholarship.application_deadline }}</p>
+                    <p><strong>Scholarship Amount:</strong> INR {{ scholarship.scholarship_amount }}</p>
+                    <a href="{% url 'apply_scholarship' scholarship.pk %}"
+                        class="mt-2 inline-block bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <p class="mt-6"><a href="{% url 'student_logout' %}"
+                class="text-blue-500 hover:underline">Logout</a></p>
+    </div>
+</div>
+
+
+<!-- Notification popup (hidden by default) -->
+<div id="notificationPopup" class="fixed inset-0 flex items-center justify-center z-50 hidden">
+    <div class="bg-white w-80 p-6 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold mb-4">Notifications</h2>
+
+        {% if notifications %}
+            <ul class="mb-4">
+                {% for notification in notifications %}
+                    <li class="mb-4">
+                        <p class="text-lg">
+                            Scholarship: {{ notification.scholarship_application.scholarship }} <br>
+                            Note: {{ notification.message }} <br>
+                            Status:
+                            {% if notification.approved %}
+                                <span class="text-green-600">Approved</span>
+                            {% elif notification.rejected %}
+                                <span class="text-red-600">Rejected</span>
+                            {% else %}
+                                <span class="text-yellow-600">Under Process</span>
+                            {% endif %}
+                        </p>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="text-lg">No notifications</p>
+        {% endif %}
+        
+        <button onclick="closeNotificationPopup()"
+            class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md font-semibold focus:outline-none">
+            Close
+        </button>
+    </div>
+</div>
+
+<script>
+    // JavaScript functions to open and close the notification popup
+
+    function openNotificationPopup() {
+        document.getElementById('notificationPopup').classList.remove('hidden');
+    }
+
+    function closeNotificationPopup() {
+        document.getElementById('notificationPopup').classList.add('hidden');
+    }
+</script>
+
+{% endblock %}

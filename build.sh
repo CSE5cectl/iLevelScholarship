@@ -9,4 +9,4 @@ python3.9 -m pip install -r requirements.txt
 # python3.9 manage.py migrate --noinput
 
 echo "Collecting static files..."
-python manage.py collectstatic --noinput --clear
+#python manage.py collectstatic --noinput --clear

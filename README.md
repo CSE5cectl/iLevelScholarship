@@ -1,6 +1,6 @@
 ## Django Web App for Institution Level Verification for Scholarships
 This web app allows Indian students to get institution level verification done for scholarships in their home states when they are studying in another state within India. It is built using Django, PostgreSQL, and Tailwind CSS.
-[Web App link](https://github.com/CSE5cectl/iLevelScholarship)
+[Web App link](https://i-level-scholarship.vercel.app/)
 
 **Features:**
 

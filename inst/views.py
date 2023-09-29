@@ -32,7 +32,7 @@ def institution_dashboard(request):
         action = request.POST.get('action')  # 'approve' or 'reject'
 
         if application_id and action:
-            application_notification = ScholarshipApplicationNotification.objects.get(id=str(int(application_id)+2))
+            application_notification = ScholarshipApplicationNotification.objects.get(id=application_id)
             if action == 'approve':
                 application_notification.approved = True
                 application_notification.rejected = False 
